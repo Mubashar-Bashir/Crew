@@ -1,0 +1,39 @@
+extract_feedback:
+  description: >
+    Extract structured feedback data from the provided image or PDF file ({input_file}).
+    Ensure the extracted data is formatted as JSON while allowing flexibility for missing fields.
+  expected_output: >
+    A JSON object containing structured feedback details. The extracted fields should align with
+    the expected following schema, but missing values should be allowed instead of causing validation failures ,
+    "name": "M Suleman",
+    "institution": "Government G.CIG",
+    "contact": "03236390067",
+    "designation": "Student",
+    "content_relevance": "Good",
+    "clarity_of_explanation": "Very Clear",
+    "presenter_engagement": "Very Engaging",
+    "communication_effectiveness": "Good",
+    "overall_rating": "Excellent",
+    "suggestions_for_improvement": "Nothing special",
+    "interest_in_more_sessions": "Yes",
+    "preferred_topics": None.
+  agent: feedback_extractor
+  expected_output: "JSON containing extracted feedback data"  # ✅ Add this line
+
+validate_feedback:
+  description: >
+    Validate and refine the extracted feedback data, ensuring it follows the flexible schema.
+    If any fields are missing, infer or provide default values instead of rejecting the input.
+  expected_output: >
+    A valid JSON object where:
+    - Missing fields are assigned sensible defaults (e.g., "N/A" for missing text fields).
+    - Data inconsistencies are corrected where possible.
+    - The structure is preserved for seamless storage.
+
+save_feedback:
+  description: >
+    Store the validated feedback data securely in a structured JSON format.
+    Ensure that previous records are not lost and new entries are appended where necessary.
+  expected_output: >
+    Confirmation that the feedback data has been successfully stored in a JSON file.
+    If an error occurs, provide a detailed log message instead of failing silently.

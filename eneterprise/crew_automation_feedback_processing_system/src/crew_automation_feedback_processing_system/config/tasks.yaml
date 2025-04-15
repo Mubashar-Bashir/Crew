@@ -1,0 +1,38 @@
+---
+validate_and_store_file_task:
+  description: Validate the uploaded file {uploaded_file} using FileReadTool and ensure
+    it matches allowed formats. Securely store the file using a directory management
+    tool and log metadata {file_metadata} for tracking.
+  expected_output: File {uploaded_file} is validated, securely stored, and its metadata
+    {file_metadata} is logged for further processing.
+  async_execution: false
+  agent: file_uploader
+extract_text_task:
+  description: Retrieve the stored file {uploaded_file} and extract raw text using
+    OCR-like processing. For PDF files, use PDFSearchTool, and for text extraction,
+    use TXTSearchTool. Handle any errors using built-in error handling strategies.
+  expected_output: Raw text extracted from {uploaded_file} ready for JSON formatting.
+  async_execution: false
+  agent: json_data_extractor
+  context:
+  - validate_and_store_file_task
+format_to_json_task:
+  description: Convert the raw extracted text from {uploaded_file} into structured
+    JSON based on the schema {predefined_columns} using a custom data formatter and
+    JSONSearchTool for schema validation.
+  expected_output: Structured JSON data that adheres to the predefined schema {predefined_columns}.
+  async_execution: false
+  agent: json_structurer
+  context:
+  - extract_text_task
+update_google_sheet_task:
+  description: Map the structured JSON data from {uploaded_file} to the predefined
+    columns {predefined_columns} and append the data as a new row in the Google Sheet
+    identified by {google_sheet_id} using a custom integration logic. Validate the
+    data before insertion and log any errors.
+  expected_output: A new row in the Google Sheet {google_sheet_id} containing the
+    mapped feedback data extracted from {uploaded_file}.
+  async_execution: false
+  agent: sheets_integration
+  context:
+  - format_to_json_task

@@ -1,0 +1,21 @@
+[project]
+name = "my_fist_flow"
+version = "0.1.0"
+description = "my-fist-flow using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.95.0,<1.0.0",
+    "litellm>=1.57.4",
+]
+
+[project.scripts]
+kickoff = "my_fist_flow.main:kickoff"
+plot = "my_fist_flow.main:plot"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"
